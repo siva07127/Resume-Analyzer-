@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
-import os
 from PyPDF2 import PdfReader
+import os
 
 app = Flask(
     __name__,
@@ -10,6 +10,8 @@ app = Flask(
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 skills_list = [
     'python',
@@ -32,6 +34,7 @@ skills_list = [
 ]
 
 job_roles = {
+
     'Python Developer': [
         'python',
         'flask',
@@ -92,11 +95,6 @@ def index():
         file = request.files['resume']
 
         if file:
-
-            os.makedirs(
-                app.config['UPLOAD_FOLDER'],
-                exist_ok=True
-            )
 
             filepath = os.path.join(
                 app.config['UPLOAD_FOLDER'],
