@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>AI Resume Analyzer</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="topbar">
+
+    <h1>AI Resume Analyzer</h1>
+
+    <p>
+        Upload your resume and get AI powered insights
+    </p>
+
+</div>
+
+<div class="container">
+
+    <div class="upload-box">
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <input type="file" name="resume" required>
+
+            <button type="submit">
+                Analyze Resume
+            </button>
+
+        </form>
+
+    </div>
+
+    {% if score > 0 %}
+
+    <div class="grid">
+
+        <div class="card">
+
+            <h2>Resume Score</h2>
+
+            <canvas id="scoreChart"></canvas>
+
+            <h3>{{ score }}/100</h3>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Detected Skills</h2>
+
+            <div class="skills">
+
+                {% for skill in skills %}
+
+                <span>{{ skill }}</span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Suggested Jobs</h2>
+
+            <ul>
+
+                {% for job in jobs %}
+
+                <li>{{ job }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Suggestions</h2>
+
+            <ul>
+
+                {% for suggestion in suggestions %}
+
+                <li>{{ suggestion }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<footer>
+
+    © 2026 @KALAKADA SIVAKUMAR |
+    AI Resume Analyzer |
+    <span id="date"></span>
+
+</footer>
+
+{% if score > 0 %}
+
+<script>
+
+const ctx = document.getElementById('scoreChart');
+
+new Chart(ctx, {
+
+    type: 'doughnut',
+
+    data: {
+
+        labels: ['Score', 'Remaining'],
+
+        datasets: [{
+
+            data: [
+                {{ score }},
+                {{ 100-score }}
+            ],
+
+            backgroundColor: [
+                '#4F46E5',
+                '#E5E7EB'
+            ],
+
+            borderWidth: 0
+
+        }]
+    },
+
+    options: {
+
+        cutout: '70%',
+
+        plugins: {
+
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+document.getElementById("date").innerHTML =
+new Date().toLocaleDateString();
+
+</script>
+
+{% endif %}
+
+</body>
+</html>
